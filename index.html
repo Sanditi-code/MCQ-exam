@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MCQ Exam App</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f2f2f2;
+    text-align: center;
+}
+
+.container {
+    width: 60%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.question {
+    margin: 20px 0;
+    text-align: left;
+}
+
+button {
+    padding: 10px 20px;
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.result {
+    font-size: 20px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MCQ Exam</h1>
+
+    <div class="header">
+        <div>Attempted: <span id="attempted">0</span></div>
+        <div>Time: <span id="time">0</span>s</div>
+    </div>
+
+    <form id="quizForm">
+
+        <div class="question">
+            <p>1. Which of the following is a countable noun?</p>
+            <input type="radio" name="q1" value="1"> Information<br>
+            <input type="radio" name="q1" value="2"> Rice<br>
+            <input type="radio" name="q1" value="3"> Pen<br>
+            <input type="radio" name="q1" value="4">Furniture
+        </div>
+
+        <div class="question">
+            <p>2. Which conjunction would you use to show contrast between two clauses?</p>
+            <input type="radio" name="q2" value="1"> So<br>
+            <input type="radio" name="q2" value="2"> But<br>
+            <input type="radio" name="q2" value="3"> Because<br>
+            <input type="radio" name="q2" value="4">If
+        </div>
+
+        <div class="question">
+            <p>3. Which of the following adverbs shows the purpose of an action? </p>
+            <input type="radio" name="q3" value="1"> So<br>
+            <input type="radio" name="q3" value="2"> Soon<br>
+            <input type="radio" name="q3" value="3"> Quickly<br>
+            <input type="radio" name="q3" value="4">Every
+        </div>
+        <div class="question">
+            <p>4. Which of the following is an example of interjection? </p>
+            <input type="radio" name="q4" value="1"> Running<br>
+            <input type="radio" name="q4" value="2"> Quickly<br>
+            <input type="radio" name="q4" value="3"> Hurrah!<br>
+            <input type="radio" name="q4" value="4"> Jumping
+        </div>
+        <div class="question">
+            <p>5. Which sentence contains a pronominal adjective? </p>
+            <input type="radio" name="q5" value="1"> This book is mine<br>
+            <input type="radio" name="q5" value="2"> I gave her the book<br>
+            <input type="radio" name="q5" value="3"> she choose those shoes<br>
+            <input type="radio" name="q5" value="4">I lost my pen
+        </div>
+
+        <button type="button" onclick="submitQuiz()">Submit</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+</div>
+
+<script>
+let attempted = 0;
+let startTime = Date.now();
+
+// Timer
+setInterval(() => {
+    let currentTime = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById("time").innerText = currentTime;
+}, 1000);
+
+// Count attempted
+document.querySelectorAll("input[type=radio]").forEach(input => {
+    input.addEventListener("change", () => {
+        let answered = new Set();
+        document.querySelectorAll("input[type=radio]:checked").forEach(q => {
+            answered.add(q.name);
+        });
+        attempted = answered.size;
+        document.getElementById("attempted").innerText = attempted;
+    });
+});
+
+// Submit
+function submitQuiz() {
+    let correctAnswers = {
+        q1: "3",
+        q2: "2",
+        q3: "1",
+        q4: "3",
+        q5: "3",
+    }
+
+    let correct = 0;
+    let wrong = 0;
+
+    for (let key in correctAnswers) {
+        let selected = document.querySelector(`input[name=${key}]:checked`);
+        if (selected) {
+            if (selected.value === correctAnswers[key]) {
+                correct++;
+            } else {
+                wrong++;
+            }
+        }
+    }
+
+    let timeTaken = Math.floor((Date.now() - startTime) / 1000);
+
+    document.getElementById("result").innerHTML =
+        `✅ Correct: ${correct} <br>
+        ❌ Wrong: ${wrong} <br>
+        ⏱ Time Taken: ${timeTaken} seconds`;
+}
+</script>
+
+</body>
+</html>
